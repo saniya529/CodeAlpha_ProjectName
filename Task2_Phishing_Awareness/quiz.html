@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phishing Awareness Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .quiz-box {
+            background: white;
+            max-width: 600px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: #245a91;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #163d65;
+        }
+        button[hidden] {
+            display: none;
+        } 
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-box">
+    <h1>Phishing Awareness Quiz</h1>
+    <p id="question"></p>
+    <div id="options"></div>
+    <p id="result"></p>
+    <button id="nextBtn" onclick="nextQuestion()" hidden>
+        Next Question
+    </button>
+</div>
+
+<script>
+const questions = [
+    {
+        question: "1. What is phishing?",
+        options: [
+            "An online scam to steal information",
+            "A computer game",
+            "A search engine",
+            "A programming language"
+        ],
+        answer: 0
+    },
+    {
+        question: "2. Should you share your OTP?",
+        options: ["Yes", "No"],
+        answer: 1
+    },
+    {
+        question: "3. Which is a warning sign of phishing?",
+        options: [
+            "Urgent suspicious messages",
+            "Regular updates",
+            "Known contacts",
+            "Normal website browsing"
+        ],
+        answer: 0
+    },
+    {
+        question: "4. What should you do with an unknown link?",
+        options: [
+            "Click immediately",
+            "Share it",
+            "Avoid clicking and verify it",
+            "Enter your password"
+        ],
+        answer: 2
+    },
+    {
+        question: "5. What is social engineering?",
+        options: [
+            "A computer update",
+            "Manipulating people to reveal information",
+            "A type of printer",
+            "A website design"
+        ],
+        answer: 1
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[currentQuestion];
+
+    document.getElementById("question").textContent = q.question;
+    document.getElementById("result").textContent = "";
+    document.getElementById("nextBtn").hidden = true;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => checkAnswer(index);
+        optionsDiv.appendChild(button);
+    });
+}
+
+function checkAnswer(selected) {
+    if (answered) return;
+    answered = true;
+
+    const correct = questions[currentQuestion].answer;
+
+    if (selected === correct) {
+        score++;
+        document.getElementById("result").textContent = "Correct answer!";
+    } else {
+        document.getElementById("result").textContent =
+            "Incorrect. Correct answer: " +
+            questions[currentQuestion].options[correct];
+    }
+
+    document.getElementById("nextBtn").hidden = false;
+}
+
+function nextQuestion() {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        document.getElementById("question").textContent = "Quiz Completed!";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("result").textContent =
+            "Your Score: " + score + " out of " + questions.length;
+
+        // Hide Next Question button after final score
+        document.getElementById("nextBtn").hidden = true;
+    }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
